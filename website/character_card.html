@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grifts Character Card</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c10;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-white p-4">
+
+    <!-- Card Container -->
+    <div id="character-card-container" class="relative w-full max-w-sm mx-auto bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-700 overflow-hidden transform transition-all duration-300 hover:scale-105">
+        
+        <!-- Placeholder for Character Image -->
+        <div class="relative w-full h-64 bg-gray-700 flex items-center justify-center overflow-hidden">
+            <img id="character-image" class="w-full h-full object-cover transition-opacity duration-300" src="https://placehold.co/400x400/1F2937/F3F4F6?text=Image+Loading..." onerror="this.onerror=null;this.src='https://placehold.co/400x400/374151/D1D5DB?text=Image+Not+Found';" alt="Character Image">
+            <div id="rarity-glow" class="absolute inset-0 z-0 opacity-50 blur-xl"></div>
+        </div>
+
+        <!-- Card Details -->
+        <div class="p-5 relative z-10">
+            <!-- Rarity and Faction -->
+            <div class="flex justify-between items-center mb-2">
+                <span id="card-rarity" class="bg-gray-700 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider">Loading...</span>
+                <span id="card-faction" class="text-gray-400 text-sm font-medium"></span>
+            </div>
+
+            <!-- Name and Stats -->
+            <h1 id="card-name" class="text-2xl font-bold text-white mb-2 leading-tight">Loading...</h1>
+            <div class="grid grid-cols-3 gap-2 text-sm font-medium text-gray-400">
+                <div class="bg-gray-700 px-3 py-1 rounded-full text-center">
+                    <span id="stat-attack" class="text-white font-semibold"></span> ATT
+                </div>
+                <div class="bg-gray-700 px-3 py-1 rounded-full text-center">
+                    <span id="stat-defense" class="text-white font-semibold"></span> DEF
+                </div>
+                <div class="bg-gray-700 px-3 py-1 rounded-full text-center">
+                    <span id="stat-speed" class="text-white font-semibold"></span> SPD
+                </div>
+            </div>
+
+            <!-- Description -->
+            <p id="card-description" class="mt-4 text-gray-300 text-sm leading-relaxed"></p>
+
+            <!-- Abilities -->
+            <div class="mt-4">
+                <h2 class="text-lg font-bold mb-2 text-white">Abilities</h2>
+                <ul id="ability-list" class="space-y-1 text-gray-300 text-sm">
+                    <!-- Abilities will be injected here by JS -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to populate the card -->
+    <script>
+        // Simulate fetching card data
+        async function getCardData() {
+            // In a real app, this would be an API call or a database query.
+            // For now, we'll hardcode a character for demonstration.
+            const characterData = {
+                "id": "spriglet_001",
+                "name": "Spriglet",
+                "faction": "Fluxborn",
+                "rarity": "Common",
+                "stats": {
+                    "attack": 3,
+                    "defense": 4,
+                    "speed": 6
+                },
+                "abilities": [
+                    "Moss Burst",
+                    "Rootbind"
+                ],
+                "image": "https://placehold.co/400x400/98d24b/ffffff?text=Spriglet",
+                "description": "A plushable creature born from wild Flux energy, embodying the playful spirit of the Collectiverse."
+            };
+            return characterData;
+        }
+
+        async function renderCard() {
+            const card = await getCardData();
+            if (card) {
+                document.getElementById('character-image').src = card.image;
+                document.getElementById('card-name').textContent = card.name;
+                document.getElementById('card-faction').textContent = card.faction;
+                document.getElementById('card-rarity').textContent = card.rarity;
+                document.getElementById('stat-attack').textContent = card.stats.attack;
+                document.getElementById('stat-defense').textContent = card.stats.defense;
+                document.getElementById('stat-speed').textContent = card.stats.speed;
+                document.getElementById('card-description').textContent = card.description;
+
+                const abilityList = document.getElementById('ability-list');
+                abilityList.innerHTML = ''; // Clear existing abilities
+                card.abilities.forEach(ability => {
+                    const li = document.createElement('li');
+                    li.textContent = `• ${ability}`;
+                    abilityList.appendChild(li);
+                });
+
+                // Apply rarity-specific styling
+                const rarityGlow = document.getElementById('rarity-glow');
+                const rarityColorMap = {
+                    'Common': 'bg-green-500',
+                    'Uncommon': 'bg-blue-500',
+                    'Rare': 'bg-purple-500',
+                    'Mythic': 'bg-yellow-500'
+                };
+                const color = rarityColorMap[card.rarity] || 'bg-gray-500';
+                rarityGlow.className = `absolute inset-0 z-0 opacity-50 blur-xl ${color}`;
+            }
+        }
+
+        window.onload = renderCard;
+    </script>
+
+</body>
+</html>
+

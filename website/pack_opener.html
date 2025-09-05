@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grifts Pack Opener</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c10;
+        }
+        /* Custom rarity glow */
+        .glow-common { --tw-bg-opacity: 0.5; background-color: rgba(34, 197, 94, var(--tw-bg-opacity)); }
+        .glow-uncommon { --tw-bg-opacity: 0.5; background-color: rgba(59, 130, 246, var(--tw-bg-opacity)); }
+        .glow-rare { --tw-bg-opacity: 0.5; background-color: rgba(168, 85, 247, var(--tw-bg-opacity)); }
+        .glow-mythic { --tw-bg-opacity: 0.5; background-color: rgba(234, 179, 8, var(--tw-bg-opacity)); }
+        .card-container {
+            animation: fadeInScale 0.8s ease-out forwards;
+        }
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .reveal-button {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .reveal-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen text-white p-4">
+
+    <main class="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
+        <!-- Pack Opening Area -->
+        <div id="pack-container" class="w-full flex flex-col items-center justify-center">
+            <h1 class="text-3xl font-bold mb-6 text-center text-white">Grifts Pack Opener</h1>
+            <button id="open-pack-btn" class="reveal-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all">
+                Open First Rift Pack
+            </button>
+        </div>
+
+        <!-- Card Container - Initially hidden -->
+        <div id="card-container-wrapper" class="hidden w-full mt-8">
+            <div id="character-card-container" class="relative w-full mx-auto bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-700 overflow-hidden transform transition-all duration-300 hover:scale-105">
+                
+                <!-- Placeholder for Character Image -->
+                <div class="relative w-full h-64 bg-gray-700 flex items-center justify-center overflow-hidden">
+                    <img id="character-image" class="w-full h-full object-cover transition-opacity duration-300" src="" alt="Character Image">
+                    <div id="rarity-glow" class="absolute inset-0 z-0 opacity-50 blur-xl"></div>
+                </div>
+
+                <!-- Card Details -->
+                <div class="p-5 relative z-10">
+                    <!-- Rarity and Faction -->
+                    <div class="flex justify-between items-center mb-2">
+                        <span id="card-rarity" class="bg-gray-700 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider"></span>
+                        <span id="card-faction" class="text-gray-400 text-sm font-medium"></span>
+                    </div>
+
+                    <!-- Name and Stats -->
+                    <h1 id="card-name" class="text-2xl font-bold text-white mb-2 leading-tight"></h1>
+                    <div class="grid grid-cols-3 gap-2 text-sm font-medium text-gray-400">
+                        <div class="bg-gray-700 px-3 py-1 rounded-full text-center">
+                            <span id="stat-attack" class="text-white font-semibold"></span> ATT
+                        </div>
+                        <div class="bg-gray-700 px-3 py-1 rounded-full text-center">
+                            <span id="stat-defense" class="text-white font-semibold"></span> DEF
+                        </div>
+                        <div class="bg-gray-700 px-3 py-1 rounded-full text-center">
+                            <span id="stat-speed" class="text-white font-semibold"></span> SPD
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p id="card-description" class="mt-4 text-gray-300 text-sm leading-relaxed"></p>
+                </div>
+            </div>
+            <button id="next-card-btn" class="mt-4 reveal-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all w-full">
+                Next Card (1/5)
+            </button>
+        </div>
+    </main>
+
+    <!-- JavaScript to handle pack opening logic and card rendering -->
+    <script>
+        const absolutePath = "./";        let charactersData = [];
+        let packsData = [];
+        let packContents = [];
+        let cardIndex = 0;
+
+        const rarityColors = {
+            'Common': 'bg-green-500',
+            'Uncommon': 'bg-blue-500',
+            'Rare': 'bg-purple-500',
+            'Mythic': 'bg-yellow-500'
+        };
+
+        const rarityGlows = {
+            'Common': 'glow-common',
+            'Uncommon': 'glow-uncommon',
+            'Rare': 'glow-rare',
+            'Mythic': 'glow-mythic'
+        };
+
+        async function loadData() {
+            try {
+                const charactersRes = await fetch(absolutePath + 'data/characters/characters.json');
+                const packsRes = await fetch(absolutePath + 'data/packs/packs.json');
+                charactersData = await charactersRes.json();
+                packsData = await packsRes.json();
+            } catch (error) {
+                console.error("Failed to load data files. Please check the path and file names.", error);
+                alert("Error loading data. Check console for details.");
+            }
+        }
+
+        function openPack(packName) {
+            const pack = packsData.find(p => p.name === packName);
+            if (!pack) {
+                console.error(`Pack '${packName}' not found.`);
+                return [];
+            }
+
+            const probabilities = pack.contents.characters;
+            const chosenCards = [];
+            const allCharacters = charactersData;
+
+            // Prepare a flat list of characters and their corresponding weights
+            const weightedChoices = allCharacters.map(char => {
+                const weight = probabilities[char.rarity.toLowerCase()] || 0;
+                return { char, weight };
+            });
+
+            if (weightedChoices.every(c => c.weight === 0)) {
+                console.error("Error: No valid probabilities defined for the pack.");
+                return [];
+            }
+
+            for (let i = 0; i < 5; i++) {
+                const randomChoice = Math.random() * weightedChoices.reduce((sum, c) => sum + c.weight, 0);
+                let cumulativeWeight = 0;
+                for (const { char, weight } of weightedChoices) {
+                    cumulativeWeight += weight;
+                    if (randomChoice < cumulativeWeight) {
+                        chosenCards.push(char);
+                        break;
+                    }
+                }
+            }
+            return chosenCards;
+        }
+
+        function renderCard(card) {
+            const cardContainer = document.getElementById('character-card-container');
+            const rarityGlow = document.getElementById('rarity-glow');
+            const cardRarity = document.getElementById('card-rarity');
+            const characterImage = document.getElementById('character-image');
+            
+            // Update the UI with character data
+            characterImage.src = card.image || `https://placehold.co/400x400/${rarityColors[card.rarity].slice(3)}/ffffff?text=${card.name}`;
+            document.getElementById('card-name').textContent = card.name;
+            document.getElementById('card-faction').textContent = card.faction;
+            cardRarity.textContent = card.rarity;
+            document.getElementById('stat-attack').textContent = card.stats.attack;
+            document.getElementById('stat-defense').textContent = card.stats.defense;
+            document.getElementById('stat-speed').textContent = card.stats.speed;
+            document.getElementById('card-description').textContent = card.description;
+
+            // Update styling based on rarity
+            cardRarity.className = `bg-gray-700 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider ${rarityColors[card.rarity] || 'bg-gray-500'}`;
+            rarityGlow.className = `absolute inset-0 z-0 opacity-50 blur-xl ${rarityGlows[card.rarity] || 'bg-gray-500'}`;
+            
+            // Animate card reveal
+            cardContainer.classList.add('card-container');
+        }
+
+        async function init() {
+            await loadData();
+            document.getElementById('open-pack-btn').addEventListener('click', () => {
+                packContents = openPack("First Rift Pack");
+                cardIndex = 0;
+                document.getElementById('pack-container').classList.add('hidden');
+                document.getElementById('card-container-wrapper').classList.remove('hidden');
+                renderCard(packContents[cardIndex]);
+                document.getElementById('next-card-btn').textContent = `Next Card (${cardIndex + 1}/5)`;
+            });
+
+            document.getElementById('next-card-btn').addEventListener('click', () => {
+                cardIndex++;
+                if (cardIndex < packContents.length) {
+                    renderCard(packContents[cardIndex]);
+                    document.getElementById('next-card-btn').textContent = `Next Card (${cardIndex + 1}/5)`;
+                } else {
+                    alert("You've opened all 5 cards!");
+                    window.location.reload();
+                }
+            });
+        }
+        
+        // Initialize on window load
+        window.onload = init;
+    </script>
+
+</body>
+</html>
+
