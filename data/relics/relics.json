@@ -1,1 +1,285 @@
-{}
+[
+  {
+    "id": "relic_flux_blade_001",
+    "name": "Flux Blade",
+    "type": "Weapon",
+    "rarity": "Common",
+    "stat_boosts": {
+      "attack": 2
+    },
+    "special_effect": null,
+    "image": "relic_flux_blade.png",
+    "description": "A blade born from raw Flux energy, pulsing with a faint glow."
+  },
+  {
+    "id": "relic_archivist_lens_002",
+    "name": "Archivist's Lens",
+    "type": "Tool",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "speed": 3
+    },
+    "special_effect": "Gives a character a small speed boost and allows them to see the top card of the opponent's deck.",
+    "image": "relic_archivist_lens.png",
+    "description": "A precision tool used by Archivists to analyze the flow of Flux."
+  },
+  {
+    "id": "relic_corrupted_shard_003",
+    "name": "Corrupted Shard",
+    "type": "Corrupted",
+    "rarity": "Rare",
+    "stat_boosts": {
+      "attack": 5,
+      "defense": -2
+    },
+    "special_effect": "Deals a small amount of damage to the attached character each turn.",
+    "image": "relic_corrupted_shard.png",
+    "description": "A dangerous shard from the Rift, granting great power at a cost."
+  },
+  {
+    "id": "relic_flux_blade_001",
+    "name": "Flux Blade",
+    "type": "Weapon",
+    "rarity": "Common",
+    "stat_boosts": {
+      "attack": 2
+    },
+    "special_effect": null,
+    "image": "relic_flux_blade.png",
+    "description": "A blade born from raw Flux energy, pulsing with a faint glow."
+  },
+  {
+    "id": "relic_archivist_lens_002",
+    "name": "Archivist's Lens",
+    "type": "Tool",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "speed": 3
+    },
+    "special_effect": "Gives a character a small speed boost and allows them to see the top card of the opponent's deck.",
+    "image": "relic_archivist_lens.png",
+    "description": "A precision tool used by Archivists to analyze the flow of Flux."
+  },
+  {
+    "id": "relic_corrupted_shard_003",
+    "name": "Corrupted Shard",
+    "type": "Corrupted",
+    "rarity": "Rare",
+    "stat_boosts": {
+      "attack": 5,
+      "defense": -2
+    },
+    "special_effect": "Deals a small amount of damage to the attached character each turn.",
+    "image": "relic_corrupted_shard.png",
+    "description": "A dangerous shard from the Rift, granting great power at a cost."
+  },
+  {
+    "id": "relic_grift_key_004",
+    "name": "Grift Key",
+    "type": "Tool",
+    "rarity": "Common",
+    "stat_boosts": null,
+    "special_effect": "Unlocks a new Rift event on the map for a short time.",
+    "image": "relic_grift_key.png",
+    "description": "A small, unassuming key said to unlock minor Grifts and secrets."
+  },
+  {
+    "id": "relic_scrapling_wrench_005",
+    "name": "Scrapling Wrench",
+    "type": "Tool",
+    "rarity": "Common",
+    "stat_boosts": {
+      "defense": 1
+    },
+    "special_effect": "Can be used to repair a damaged relic once per battle.",
+    "image": "relic_scrapling_wrench.png",
+    "description": "A crudely-made wrench, perfect for fixing broken things or dealing a tiny blow."
+  },
+  {
+    "id": "relic_constellated_shield_006",
+    "name": "Constellated Shield",
+    "type": "Armor",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "defense": 4
+    },
+    "special_effect": null,
+    "image": "relic_constellated_shield.png",
+    "description": "A polished shield bearing the mark of an ancient constellation."
+  },
+  {
+    "id": "relic_void_crystal_007",
+    "name": "Void Crystal",
+    "type": "Corrupted",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "attack": 3,
+      "speed": -1
+    },
+    "special_effect": "A chance to momentarily freeze an enemy character.",
+    "image": "relic_void_crystal.png",
+    "description": "A crystal pulsing with empty energy from the Rift, heavy to wield."
+  },
+  {
+    "id": "relic_luminous_orb_008",
+    "name": "Luminous Orb",
+    "type": "Tool",
+    "rarity": "Rare",
+    "stat_boosts": {
+      "speed": 5
+    },
+    "special_effect": "Grants the ability to draw an extra card from the deck.",
+    "image": "relic_luminous_orb.png",
+    "description": "A small orb that illuminates the path forward, revealing hidden truths."
+  },
+  {
+    "id": "relic_aetherium_core_009",
+    "name": "Aetherium Core",
+    "type": "Fluxborn",
+    "rarity": "Mythic",
+    "stat_boosts": {
+      "attack": 8,
+      "defense": 8,
+      "speed": 8
+    },
+    "special_effect": "Transforms into a more powerful form for a limited time in battle.",
+    "image": "relic_aetherium_core.png",
+    "description": "The heart of a fallen star, brimming with raw, untamed Flux energy."
+  },
+  {
+    "id": "relic_rustfang_dagger_010",
+    "name": "Rustfang Dagger",
+    "type": "Weapon",
+    "rarity": "Common",
+    "stat_boosts": {
+      "attack": 2
+    },
+    "special_effect": null,
+    "image": "relic_rustfang_dagger.png",
+    "description": "A dagger pulled from a broken world, with a faint corroding aura""prop": "",": "",."
+  },
+  {
+    "id": "relic_obsidian_glaive_011",
+    "name": "Obsidian Glaive",
+    "type": "Weapon",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "attack": 4
+    },
+    "special_effect": null,
+    "image": "relic_obsidian_glaive.png",
+    "description": "A sharp, heavy glaive forged from solidified magic."
+  },
+  {
+    "id": "relic_scrapling_jetpack_012",
+    "name": "Scrapling Jetpack",
+    "type": "Tool",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "speed": 6
+    },
+    "special_effect": null,
+    "image": "relic_scrapling_jetpack.png",
+    "description": "A jury-rigged contraption that boosts a character's speed."
+  },
+  {
+    "id": "relic_chaos_engine_013",
+    "name": "Chaos Engine",
+    "type": "Corrupted",
+    "rarity": "Rare",
+    "stat_boosts": {
+      "attack": 7,
+      "defense": -3
+    },
+    "special_effect": "Causes a random positive or negative effect on the field each turn.",
+    "image": "relic_chaos_engine.png",
+    "description": "A strange machine that runs on chaotic Flux, its purpose is a mystery."
+  },
+  {
+    "id": "relic_archivist_staff_014",
+    "name": "Archivist's Staff",
+    "type": "Weapon",
+    "rarity": "Rare",
+    "stat_boosts": {
+      "attack": 5,
+      "defense": 5
+    },
+    "special_effect": "Can absorb the energy of one enemy's ability, preventing its use.",
+    "image": "relic_archivist_staff.png",
+    "description": "A ceremonial staff of the Archivists, used to command the flow of Flux."
+  },
+  {
+    "id": "relic_cosmic_compass_015",
+    "name": "Cosmic Compass",
+    "type": "Tool",
+    "rarity": "Rare",
+    "stat_boosts": null,
+    "special_effect": "Allows the player to see the top three cards of their deck and rearrange them.",
+    "image": "relic_cosmic_compass.png",
+    "description": "A mystical compass that always points toward the most powerful Flux source."
+  },
+  {
+    "id": "relic_aetherium_ring_016",
+    "name": "Aetherium Ring",
+    "type": "Accessory",
+    "rarity": "Uncommon",
+    "stat_boosts": {
+      "defense": 2,
+      "speed": 2
+    },
+    "special_effect": "Grants a small chance to dodge an attack.",
+    "image": "relic_aetherium_ring.png",
+    "description": "A ring forged from pure Aetherium, light and nimble."
+  },
+  {
+    "id": "relic_temporal_gauntlet_017",
+    "name": "Temporal Gauntlet",
+    "type": "Weapon",
+    "rarity": "Mythic",
+    "stat_boosts": {
+      "attack": 10
+    },
+    "special_effect": "Can revert the battlefield to a previous turn's state once per battle.",
+    "image": "relic_temporal_gauntlet.png",
+    "description": "A gauntlet that allows the wielder to manipulate the flow of time."
+  },
+  {
+    "id": "relic_scrapling_cannon_018",
+    "name": "Scrapling Cannon",
+    "type": "Weapon",
+    "rarity": "Rare",
+    "stat_boosts": {
+      "attack": 8,
+      "defense": -4
+    },
+    "special_effect": "Has a chance to misfire and damage the wielder.",
+    "image": "relic_scrapling_cannon.png",
+    "description": "A high-risk, high-reward cannon cobbled together from discarded technology."
+  },
+  {
+    "id": "relic_corrupted_helm_019",
+    "name": "Corrupted Helm",
+    "type": "Corrupted",
+    "rarity": "Mythic",
+    "stat_boosts": {
+      "attack": 10,
+      "defense": 10
+    },
+    "special_effect": "The character wearing this helm cannot be affected by any other relic.",
+    "image": "relic_corrupted_helm.png",
+    "description": "A mind-altering helm from the Rift, giving immense power and a terrifying new purpose."
+  },
+  {
+    "id": "relic_flux_prism_020",
+    "name": "Flux Prism",
+    "type": "Tool",
+    "rarity": "Mythic",
+    "stat_boosts": {
+      "defense": 10,
+      "speed": 10
+    },
+    "special_effect": "Can change the faction of a friendly character for one turn, granting them new abilities.",
+    "image": "relic_flux_prism.png",
+    "description": "A legendary relic that can refract and redirect the raw energy of the Flux itself."
+  }
+]

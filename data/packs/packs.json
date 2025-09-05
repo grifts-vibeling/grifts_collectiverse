@@ -1,1 +1,21 @@
-{}
+[
+  {
+    "id": "first_rift_pack",
+    "name": "First Rift Pack",
+    "contents": {
+      "characters": {
+        "common": 60,
+        "uncommon": 30,
+        "rare": 9,
+        "mythic": 1
+      },
+      "relics": {
+        "common": 70,
+        "uncommon": 25,
+        "rare": 5
+      }
+    },
+    "animation": "first_rift_pack_animation.json"
+  }
+]
+
