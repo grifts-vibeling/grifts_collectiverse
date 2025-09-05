@@ -1,1 +1,163 @@
-{}
+[
+  {
+    "id": "fluxborn_spriglet_001",
+    "name": "Spriglet",
+    "faction": "Fluxborn",
+    "rarity": "Common",
+    "stats": {
+      "attack": 3,
+      "defense": 5,
+      "speed": 7
+    },
+    "abilities": ["Vine Dash"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_spriglet.png",
+    "description": "A playful creature born from raw Flux energy, resembling a mossy sprite."
+  },
+  {
+    "id": "fluxborn_puffinix_002",
+    "name": "Puffinix",
+    "faction": "Fluxborn",
+    "rarity": "Common",
+    "stats": {
+      "attack": 5,
+      "defense": 4,
+      "speed": 6
+    },
+    "abilities": ["Ember Flight"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_puffinix.png",
+    "description": "An adorable ember-tailed creature that flits and puffs with hot energy."
+  },
+  {
+    "id": "fluxborn_glimroo_003",
+    "name": "Glimroo",
+    "faction": "Fluxborn",
+    "rarity": "Common",
+    "stats": {
+      "attack": 4,
+      "defense": 6,
+      "speed": 5
+    },
+    "abilities": ["Crystal Shield"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_glimroo.png",
+    "description": "A sturdy Fluxborn with crystal-like gem patches across its plush fur."
+  },
+  {
+    "id": "fluxborn_tideruff_004",
+    "name": "Tideruff",
+    "faction": "Fluxborn",
+    "rarity": "Rare",
+    "stats": {
+      "attack": 6,
+      "defense": 7,
+      "speed": 5
+    },
+    "abilities": ["Wave Crush"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_tideruff.png",
+    "description": "A rare Fluxborn with a shell-like exterior and the power of the tides."
+  },
+  {
+    "id": "fluxborn_pyraug_005",
+    "name": "Pyraug",
+    "faction": "Fluxborn",
+    "rarity": "Rare",
+    "stats": {
+      "attack": 8,
+      "defense": 5,
+      "speed": 6
+    },
+    "abilities": ["Lava Burst"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_pyraug.png",
+    "description": "A fiery creature with a powerful mane and paws tipped with embers."
+  },
+  {
+    "id": "fluxborn_aetheris_006",
+    "name": "Aetheris",
+    "faction": "Fluxborn",
+    "rarity": "Mythic",
+    "stats": {
+      "attack": 9,
+      "defense": 8,
+      "speed": 9
+    },
+    "abilities": ["Starfall Aura"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_aetheris.png",
+    "description": "A cosmic being layered in plush fur and a radiant aura of star energy."
+  },
+  {
+    "id": "fluxborn_obelith_007",
+    "name": "Obelith",
+    "faction": "Fluxborn",
+    "rarity": "Mythic",
+    "stats": {
+      "attack": 10,
+      "defense": 9,
+      "speed": 7
+    },
+    "abilities": ["Rune Shield"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_obelith.png",
+    "description": "A golem-like Fluxborn with crystal facets and powerful runic abilities."
+  },
+  {
+    "id": "fluxborn_volta_008",
+    "name": "Volta",
+    "faction": "Fluxborn",
+    "rarity": "Uncommon",
+    "stats": {
+      "attack": 6,
+      "defense": 5,
+      "speed": 8
+    },
+    "abilities": ["Static Shock"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_volta.png",
+    "description": "A charged creature with a plush head of charged fur and a lightning bolt sigil on its forehead."
+  },
+  {
+    "id": "fluxborn_terrak_009",
+    "name": "Terrak",
+    "faction": "Fluxborn",
+    "rarity": "Uncommon",
+    "stats": {
+      "attack": 7,
+      "defense": 8,
+      "speed": 3
+    },
+    "abilities": ["Stone Guard"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_terrak.png",
+    "description": "A sturdy character with an earthy plush body and crystal growths on its back."
+  },
+  {
+    "id": "fluxborn_mycelion_010",
+    "name": "Mycelion",
+    "faction": "Fluxborn",
+    "rarity": "Uncommon",
+    "stats": {
+      "attack": 5,
+      "defense": 6,
+      "speed": 6
+    },
+    "abilities": ["Spore Blast"],
+    "evolution_stage": 1,
+    "max_evolution_stage": 3,
+    "image": "fluxborn_mycelion.png",
+    "description": "A whimsical creature with small mushrooms sprouting from its body and a fungi rune sigil."
+  }
+]
+
