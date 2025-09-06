@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grifts Collector's Vault</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c10;
+        }
+        /* Custom rarity glow */
+        .glow-common { --tw-bg-opacity: 0.5; background-color: rgba(34, 197, 94, var(--tw-bg-opacity)); }
+        .glow-uncommon { --tw-bg-opacity: 0.5; background-color: rgba(59, 130, 246, var(--tw-bg-opacity)); }
+        .glow-rare { --tw-bg-opacity: 0.5; background-color: rgba(168, 85, 247, var(--tw-bg-opacity)); }
+        .glow-mythic { --tw-bg-opacity: 0.5; background-color: rgba(234, 179, 8, var(--tw-bg-opacity)); }
+        
+        .card-container {
+            transition: transform 0.2s ease-in-out;
+        }
+        .card-container:hover {
+            transform: scale(1.05);
+        }
+        .card-count {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen text-white p-4">
+
+    <header class="w-full text-center py-6 border-b border-gray-700">
+        <h1 class="text-3xl font-bold text-white">Your Collector's Vault</h1>
+        <p class="text-sm text-gray-400 mt-2">Displaying all your opened cards.</p>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto flex flex-col items-center p-4">
+        <div id="vault-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+            <!-- Cards will be rendered here by JavaScript -->
+        </div>
+
+        <div class="mt-8 flex space-x-4">
+            <a href="pack_opener.html" class="reveal-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all">
+                Open New Pack
+            </a>
+            <button id="clear-vault-btn" class="reveal-button bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all">
+                Clear Vault
+            </button>
+        </div>
+    </main>
+
+    <!-- JavaScript to handle vault logic and card rendering -->
+    <script>
+        const rarityColors = {
+            'Common': 'bg-green-500',
+            'Uncommon': 'bg-blue-500',
+            'Rare': 'bg-purple-500',
+            'Mythic': 'bg-yellow-500'
+        };
+
+        const rarityGlows = {
+            'Common': 'glow-common',
+            'Uncommon': 'glow-uncommon',
+            'Rare': 'glow-rare',
+            'Mythic': 'glow-mythic'
+        };
+        
+        function loadVault() {
+            const vaultData = JSON.parse(localStorage.getItem('grifts_vault') || '[]');
+            const vaultGrid = document.getElementById('vault-grid');
+            vaultGrid.innerHTML = ''; // Clear previous cards
+
+            if (vaultData.length === 0) {
+                vaultGrid.innerHTML = '<p class="col-span-full text-center text-gray-400">Your vault is empty. Go open a pack!</p>';
+                return;
+            }
+
+            vaultData.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card-container relative w-full mx-auto bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-700 overflow-hidden transform transition-all duration-300 hover:scale-105';
+                
+                // Card count display
+                if (card.count > 1) {
+                    const countSpan = document.createElement('span');
+                    countSpan.className = 'card-count';
+                    countSpan.textContent = `x${card.count}`;
+                    cardElement.appendChild(countSpan);
+                }
+
+                cardElement.innerHTML = `
+                    <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center overflow-hidden">
+                        <img class="w-full h-full object-cover transition-opacity duration-300" src="${card.image || `https://placehold.co/400x400/${rarityColors[card.rarity].slice(3)}/ffffff?text=${card.name}`}" alt="Character Image">
+                        <div class="absolute inset-0 z-0 opacity-50 blur-xl ${rarityGlows[card.rarity] || 'bg-gray-500'}"></div>
+                    </div>
+                    <div class="p-4 relative z-10">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="bg-gray-700 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider ${rarityColors[card.rarity] || 'bg-gray-500'}">${card.rarity}</span>
+                            <span class="text-gray-400 text-sm font-medium">${card.faction}</span>
+                        </div>
+                        <h1 class="text-xl font-bold text-white leading-tight">${card.name}</h1>
+                    </div>
+                `;
+                vaultGrid.appendChild(cardElement);
+            });
+        }
+
+        function clearVault() {
+            if (confirm("Are you sure you want to clear your entire vault? This cannot be undone.")) {
+                localStorage.removeItem('grifts_vault');
+                loadVault(); // Reload the vault to show it's empty
+            }
+        }
+
+        document.getElementById('clear-vault-btn').addEventListener('click', clearVault);
+        
+        // Initialize on window load
+        window.onload = loadVault;
+    </script>
+</body>
+</html>
+

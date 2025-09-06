@@ -52,6 +52,7 @@
             <button id="open-pack-btn" class="reveal-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all">
                 Open First Rift Pack
             </button>
+            <a href="vault.html" class="mt-4 text-blue-400 hover:underline">Go to My Vault</a>
         </div>
 
         <!-- Card Container - Initially hidden -->
@@ -117,6 +118,20 @@
             'Rare': 'glow-rare',
             'Mythic': 'glow-mythic'
         };
+        
+        function saveToVault(cards) {
+            const vaultData = JSON.parse(localStorage.getItem('grifts_vault') || '[]');
+            cards.forEach(card => {
+                const existingCard = vaultData.find(c => c.id === card.id);
+                if (existingCard) {
+                    // This is a simple counter, but could be more complex later
+                    existingCard.count = (existingCard.count || 1) + 1;
+                } else {
+                    vaultData.push({ ...card, count: 1 });
+                }
+            });
+            localStorage.setItem('grifts_vault', JSON.stringify(vaultData));
+        }
 
         async function loadData() {
             try {
@@ -216,9 +231,10 @@
                 if (cardIndex < packContents.length) {
                     renderCard(packContents[cardIndex]);
                 } else {
+                    saveToVault(packContents);
                     document.getElementById('next-card-btn').textContent = `Open Another Pack`;
                     document.getElementById('next-card-btn').onclick = () => window.location.reload();
-                    alert("You've opened all 5 cards!");
+                    alert("You've opened all 5 cards! They have been saved to your vault.");
                 }
             });
         }
