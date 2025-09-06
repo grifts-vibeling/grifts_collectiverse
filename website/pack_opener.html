@@ -17,6 +17,7 @@
         .glow-uncommon { --tw-bg-opacity: 0.5; background-color: rgba(59, 130, 246, var(--tw-bg-opacity)); }
         .glow-rare { --tw-bg-opacity: 0.5; background-color: rgba(168, 85, 247, var(--tw-bg-opacity)); }
         .glow-mythic { --tw-bg-opacity: 0.5; background-color: rgba(234, 179, 8, var(--tw-bg-opacity)); }
+        
         .card-container {
             animation: fadeInScale 0.8s ease-out forwards;
         }
@@ -36,6 +37,9 @@
         .reveal-button:active {
             transform: scale(0.95);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        .card-transition {
+            transition: opacity 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -94,7 +98,8 @@
 
     <!-- JavaScript to handle pack opening logic and card rendering -->
     <script>
-        const absolutePath = "./";        let charactersData = [];
+        const absolutePath = "../";
+        let charactersData = [];
         let packsData = [];
         let packContents = [];
         let cardIndex = 0;
@@ -167,22 +172,33 @@
             const cardRarity = document.getElementById('card-rarity');
             const characterImage = document.getElementById('character-image');
             
-            // Update the UI with character data
-            characterImage.src = card.image || `https://placehold.co/400x400/${rarityColors[card.rarity].slice(3)}/ffffff?text=${card.name}`;
-            document.getElementById('card-name').textContent = card.name;
-            document.getElementById('card-faction').textContent = card.faction;
-            cardRarity.textContent = card.rarity;
-            document.getElementById('stat-attack').textContent = card.stats.attack;
-            document.getElementById('stat-defense').textContent = card.stats.defense;
-            document.getElementById('stat-speed').textContent = card.stats.speed;
-            document.getElementById('card-description').textContent = card.description;
+            // Apply a fade-out effect
+            cardContainer.classList.remove('card-container');
+            cardContainer.classList.add('card-transition');
+            cardContainer.style.opacity = '0';
 
-            // Update styling based on rarity
-            cardRarity.className = `bg-gray-700 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider ${rarityColors[card.rarity] || 'bg-gray-500'}`;
-            rarityGlow.className = `absolute inset-0 z-0 opacity-50 blur-xl ${rarityGlows[card.rarity] || 'bg-gray-500'}`;
-            
-            // Animate card reveal
-            cardContainer.classList.add('card-container');
+            setTimeout(() => {
+                // Update the UI with character data
+                characterImage.src = card.image || `https://placehold.co/400x400/${rarityColors[card.rarity].slice(3)}/ffffff?text=${card.name}`;
+                document.getElementById('card-name').textContent = card.name;
+                document.getElementById('card-faction').textContent = card.faction;
+                cardRarity.textContent = card.rarity;
+                document.getElementById('stat-attack').textContent = card.stats.attack;
+                document.getElementById('stat-defense').textContent = card.stats.defense;
+                document.getElementById('stat-speed').textContent = card.stats.speed;
+                document.getElementById('card-description').textContent = card.description;
+
+                // Update styling based on rarity
+                cardRarity.className = `bg-gray-700 text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider ${rarityColors[card.rarity] || 'bg-gray-500'}`;
+                rarityGlow.className = `absolute inset-0 z-0 opacity-50 blur-xl ${rarityGlows[card.rarity] || 'bg-gray-500'}`;
+                
+                // Animate card reveal
+                cardContainer.classList.remove('card-transition');
+                cardContainer.classList.add('card-container');
+                cardContainer.style.opacity = '1';
+
+                document.getElementById('next-card-btn').textContent = `Next Card (${cardIndex + 1}/5)`;
+            }, 500); // Wait for fade-out to complete
         }
 
         async function init() {
@@ -193,17 +209,16 @@
                 document.getElementById('pack-container').classList.add('hidden');
                 document.getElementById('card-container-wrapper').classList.remove('hidden');
                 renderCard(packContents[cardIndex]);
-                document.getElementById('next-card-btn').textContent = `Next Card (${cardIndex + 1}/5)`;
             });
 
             document.getElementById('next-card-btn').addEventListener('click', () => {
                 cardIndex++;
                 if (cardIndex < packContents.length) {
                     renderCard(packContents[cardIndex]);
-                    document.getElementById('next-card-btn').textContent = `Next Card (${cardIndex + 1}/5)`;
                 } else {
+                    document.getElementById('next-card-btn').textContent = `Open Another Pack`;
+                    document.getElementById('next-card-btn').onclick = () => window.location.reload();
                     alert("You've opened all 5 cards!");
-                    window.location.reload();
                 }
             });
         }
