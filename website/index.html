@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grifts Collectiverse</title>
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Importing fonts for a clean, futuristic look */
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+        :root {
+            --bg-color: #0a0a0a;
+            --card-bg: #111111;
+            --text-light: #e0e0e0;
+            --text-gray: #7d7d7d;
+            --accent: #ff00aa;
+            --neon-purple: #9b59b6;
+            --neon-blue: #3498db;
+            --neon-green: #2ecc71;
+            --neon-yellow: #f1c40f;
+            --border-color: #222;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 0, 170, 0.1) 0%, rgba(10, 10, 10, 0.5) 70%);
+            z-index: -1;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Permanent Marker', cursive;
+            color: var(--accent);
+            text-shadow: 0 0 8px var(--accent);
+        }
+
+        .glow-border {
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(255, 0, 170, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            min-height: 250px;
+            margin-top: 2rem;
+        }
+
+        .card {
+            width: 150px;
+            transform: translateY(20px) scale(0.9);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+
+        .card.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .pack-glow {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px var(--accent), 0 0 30px rgba(255, 0, 170, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px var(--accent), 0 0 50px rgba(255, 0, 170, 0.8);
+            }
+        }
+
+        /* "Butter" button styling */
+        .btn-butter {
+            font-weight: 600;
+            font-size: 1.125rem;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
+            transform: translateY(0);
+        }
+
+        .btn-butter:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+        }
+
+        .card-image-plush {
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* Rarity glow colors */
+        .rarity-common { box-shadow: 0 0 8px var(--neon-blue); }
+        .rarity-uncommon { box-shadow: 0 0 8px var(--neon-green); }
+        .rarity-rare { box-shadow: 0 0 8px var(--neon-purple); }
+        .rarity-legendary { box-shadow: 0 0 8px var(--neon-yellow); }
+
+        .filter-btn:not(.active) {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+        .filter-btn.active {
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Main App Container -->
+    <div id="appContainer" class="max-w-4xl mx-auto text-center">
+
+        <!-- Pack Opener View -->
+        <div id="packOpenerView">
+            <h1 class="text-4xl sm:text-6xl font-extrabold mb-8">Unseal the Rift</h1>
+            <div id="pack" class="w-48 h-64 bg-card-bg rounded-3xl shadow-xl pack-glow cursor-pointer transition-all duration-300 transform hover:scale-105 mx-auto flex items-center justify-center glow-border">
+                <h2 class="text-2xl font-bold">Rift Pack</h2>
+            </div>
+            
+            <button id="openPackBtn" class="mt-12 btn-butter bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white">
+                Open a Pack
+            </button>
+            <div id="cardRevealContainer" class="card-container"></div>
+        </div>
+
+        <!-- Collector's Vault View -->
+        <div id="vaultView" class="hidden">
+            <header class="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-12">
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-accent text-center sm:text-left mb-4 sm:mb-0">Your Vault</h1>
+                <div class="flex flex-wrap justify-center sm:justify-start gap-2">
+                    <button class="filter-btn btn-butter py-2 px-4 text-white rounded-full active" data-filter="all">All</button>
+                    <button class="filter-btn btn-butter py-2 px-4 text-white rounded-full" data-filter="Fluxborn">Fluxborn</button>
+                    <button class="filter-btn btn-butter py-2 px-4 text-white rounded-full" data-filter="Constructs">Constructs</button>
+                    <button class="filter-btn btn-butter py-2 px-4 text-white rounded-full" data-filter="Scraplings">Scraplings</button>
+                    <button class="filter-btn btn-butter py-2 px-4 text-white rounded-full" data-filter="Corrupted">Corrupted</button>
+                </div>
+            </header>
+            <div id="vaultCardContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                <p id="emptyVaultMessage" class="col-span-full text-lg text-gray-400">Your vault is empty. Open a pack to get started!</p>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+                <button id="goToPackBtn" class="btn-butter bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+                    Open More Packs
+                </button>
+                <button id="multiplayerBtn" class="btn-butter bg-gradient-to-r from-orange-500 to-amber-600 text-white">
+                    Multiplayer Lobby
+                </button>
+                <button id="clearVaultBtn" class="btn-butter bg-gray-600 hover:bg-gray-700 text-white text-sm py-3 px-6">
+                    Clear Vault
+                </button>
+            </div>
+        </div>
+        
+        <!-- Battle View -->
+        <div id="battleView" class="hidden">
+            <h1 class="text-4xl sm:text-6xl font-extrabold mb-8">Grift Battle</h1>
+            
+            <div class="flex flex-col sm:flex-row justify-around items-center gap-8 mb-8">
+                <!-- Player's Grift -->
+                <div id="playerGrift" class="bg-card-bg rounded-xl shadow-md p-4 w-52 glow-border">
+                    <h2 class="text-2xl mb-2">You</h2>
+                    <img id="playerGriftImage" src="" alt="Player's Grift" class="w-full h-auto rounded-md mb-2">
+                    <h3 id="playerGriftName" class="text-lg"></h3>
+                    <div class="text-sm">
+                        <p id="playerGriftHealth">Health: 100</p>
+                        <p id="playerGriftAttack">Attack: 10</p>
+                    </div>
+                </div>
+
+                <!-- Opponent's Grift -->
+                <div id="opponentGrift" class="bg-card-bg rounded-xl shadow-md p-4 w-52 glow-border">
+                    <h2 class="text-2xl mb-2">Opponent</h2>
+                    <img id="opponentGriftImage" src="" alt="Opponent's Grift" class="w-full h-auto rounded-md mb-2">
+                    <h3 id="opponentGriftName" class="text-lg"></h3>
+                    <div class="text-sm">
+                        <p id="opponentGriftHealth">Health: 100</p>
+                        <p id="opponentGriftAttack">Attack: 10</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="battleLog" class="bg-gray-800 p-4 rounded-xl h-48 overflow-y-auto mb-4 text-left text-sm text-gray-400">
+                <p>The battle is about to begin...</p>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button id="attackBtn" class="btn-butter bg-red-500 hover:bg-red-600 text-white">Attack</button>
+                <button id="defendBtn" class="btn-butter bg-blue-500 hover:bg-blue-600 text-white">Defend</button>
+                <button id="healBtn" class="btn-butter bg-green-500 hover:bg-green-600 text-white">Heal</button>
+            </div>
+            <button id="backToVaultBtn" class="mt-8 btn-butter bg-gray-600 hover:bg-gray-700 text-white text-sm py-3 px-6">Back to Vault</button>
+        </div>
+
+        <!-- Multiplayer Lobby View -->
+        <div id="lobbyView" class="hidden">
+            <h1 class="text-4xl sm:text-6xl font-extrabold mb-8">Multiplayer Lobby</h1>
+            <p class="text-sm text-gray-400 mb-4">Share your User ID with friends to challenge them!</p>
+            <p id="userIdDisplay" class="text-lg mb-8 p-3 bg-gray-800 rounded-md break-all">User ID: Loading...</p>
+            
+            <h2 class="text-2xl font-bold mb-4">Active Challenges</h2>
+            <div id="challengesList" class="bg-card-bg p-4 rounded-xl h-64 overflow-y-auto mb-4">
+                <p class="text-gray-400">No active challenges. Create one to get started!</p>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button id="createChallengeBtn" class="btn-butter bg-gradient-to-r from-purple-500 to-indigo-600 text-white">
+                    Create Challenge
+                </button>
+                <button id="backToVaultFromLobbyBtn" class="btn-butter bg-gray-600 hover:bg-gray-700 text-white text-sm py-3 px-6">
+                    Back to Vault
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // This function will attempt to initialize the app only when the necessary variables are available.
+        const initApp = () => {
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            let firebaseConfig = null;
+            let initialAuthToken = null;
+
+            // Use a try-catch block to handle potential JSON parsing errors
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    firebaseConfig = JSON.parse(__firebase_config);
+                }
+            } catch (e) {
+                console.error("Error parsing Firebase config from environment. Check format.", e);
+            }
+
+            // Check if firebaseConfig is a valid object.
+            if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+                console.warn("Firebase config is missing or invalid. Retrying in 500ms...");
+                setTimeout(initApp, 500); // Retry initialization after a short delay
+                return;
+            }
+
+            // At this point, the config is confirmed to be valid.
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                initialAuthToken = __initial_auth_token;
+            }
+
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            let userId = null;
+            let isAuthReady = false;
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    document.getElementById('userIdDisplay').textContent = `User ID: ${userId}`;
+                    isAuthReady = true;
+                    // Initial load of the vault from Firestore
+                    loadVaultFromFirestore();
+                    // Listen for real-time changes to the multiplayer lobby
+                    listenForChallenges();
+                } else {
+                    // Sign in with the provided custom token or anonymously
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Firebase Auth Error: ", error);
+                    }
+                }
+            });
+
+            // --- DATA AND DOM ELEMENTS ---
+            const griftsCharacters = [
+                { "id": "fluxborn_sprite_001", "name": "Fluxborn Sprite", "faction": "Fluxborn", "rarity": "Uncommon", "image": "https://placehold.co/300x420/86efac/0f172a?text=Fluxborn+Sprite", "attack": 15, "health": 100 },
+                { "id": "guardian_golem_002", "name": "Guardian Golem", "faction": "Constructs", "rarity": "Rare", "image": "https://placehold.co/300x420/93c5fd/0f172a?text=Guardian+Golem", "attack": 20, "health": 120 },
+                { "id": "scrapling_scout_003", "name": "Scrapling Scout", "faction": "Scraplings", "rarity": "Common", "image": "https://placehold.co/300x420/a5b4fc/0f172a?text=Scrapling+Scout", "attack": 10, "health": 80 },
+                { "id": "corrupted_wyrm_004", "name": "Corrupted Wyrm", "faction": "Corrupted", "rarity": "Legendary", "image": "https://placehold.co/300x420/fca5a5/0f172a?text=Corrupted+Wyrm", "attack": 25, "health": 150 },
+                { "id": "fluxborn_behemoth_005", "name": "Fluxborn Behemoth", "faction": "Fluxborn", "rarity": "Rare", "image": "https://placehold.co/300x420/86efac/0f172a?text=Fluxborn+Behemoth", "attack": 18, "health": 110 },
+                { "id": "archivist_drone_006", "name": "Archivist Drone", "faction": "Constructs", "rarity": "Common", "image": "https://placehold.co/300x420/93c5fd/0f172a?text=Archivist+Drone", "attack": 12, "health": 90 },
+                { "id": "scrapling_collector_007", "name": "Scrapling Collector", "faction": "Scraplings", "rarity": "Uncommon", "image": "https://placehold.co/300x420/a5b4fc/0f172a?text=Scrapling+Collector", "attack": 14, "health": 95 }
+            ];
+
+            const rarityColors = {
+                "Common": "bg-blue-400",
+                "Uncommon": "bg-green-400",
+                "Rare": "bg-purple-600",
+                "Legendary": "bg-yellow-400"
+            };
+
+            const rarityNeonClasses = {
+                "Common": "rarity-common",
+                "Uncommon": "rarity-uncommon",
+                "Rare": "rarity-rare",
+                "Legendary": "rarity-legendary"
+            };
+
+            // DOM elements
+            const packOpenerView = document.getElementById('packOpenerView');
+            const vaultView = document.getElementById('vaultView');
+            const battleView = document.getElementById('battleView');
+            const lobbyView = document.getElementById('lobbyView');
+            const packElement = document.getElementById('pack');
+            const cardRevealContainer = document.getElementById('cardRevealContainer');
+            const openPackBtn = document.getElementById('openPackBtn');
+            const vaultCardContainer = document.getElementById('vaultCardContainer');
+            const emptyVaultMessage = document.getElementById('emptyVaultMessage');
+            const goToPackBtn = document.getElementById('goToPackBtn');
+            const multiplayerBtn = document.getElementById('multiplayerBtn');
+            const clearVaultBtn = document.getElementById('clearVaultBtn');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const backToVaultBtn = document.getElementById('backToVaultBtn');
+            const backToVaultFromLobbyBtn = document.getElementById('backToVaultFromLobbyBtn');
+            const createChallengeBtn = document.getElementById('createChallengeBtn');
+            const challengesList = document.getElementById('challengesList');
+
+            const cardsPerPack = 3;
+            let currentPack = [];
+            let playerVault = [];
+
+            // --- FIRESTORE FUNCTIONS ---
+            const vaultRef = () => doc(db, 'artifacts', appId, 'users', userId, 'vault', 'myVault');
+            const challengesRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'challenges');
+
+            const saveVaultToFirestore = async (newCards) => {
+                if (!isAuthReady) return;
+                try {
+                    playerVault = [...playerVault, ...newCards];
+                    const vaultData = JSON.stringify(playerVault);
+                    await setDoc(vaultRef(), { data: vaultData });
+                    console.log("Vault saved to Firestore!");
+                } catch (e) {
+                    console.error("Error saving vault to Firestore:", e);
+                }
+            };
+
+            const loadVaultFromFirestore = async () => {
+                if (!isAuthReady) return;
+                try {
+                    const docSnap = await getDoc(vaultRef());
+                    if (docSnap.exists()) {
+                        const data = JSON.parse(docSnap.data().data);
+                        playerVault = data;
+                        renderVault(playerVault);
+                    } else {
+                        console.log("No vault found in Firestore. Starting fresh.");
+                        playerVault = [];
+                        renderVault([]);
+                    }
+                } catch (e) {
+                    console.error("Error loading vault from Firestore:", e);
+                    playerVault = [];
+                    renderVault([]);
+                }
+            };
+
+            const clearVault = async () => {
+                if (!isAuthReady) return;
+                try {
+                    await setDoc(vaultRef(), { data: JSON.stringify([]) });
+                    playerVault = [];
+                    renderVault([]);
+                    console.log("Vault cleared from Firestore!");
+                } catch (e) {
+                    console.error("Error clearing vault from Firestore:", e);
+                }
+            };
+            
+            // --- MULTIPLAYER LOGIC ---
+            const listenForChallenges = () => {
+                if (!isAuthReady) return;
+                onSnapshot(challengesRef(), (querySnapshot) => {
+                    const challenges = [];
+                    querySnapshot.forEach((doc) => {
+                        challenges.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderChallenges(challenges);
+                });
+            };
+
+            const renderChallenges = (challenges) => {
+                challengesList.innerHTML = '';
+                if (challenges.length === 0) {
+                    challengesList.innerHTML = '<p class="text-gray-400">No active challenges. Create one to get started!</p>';
+                } else {
+                    challenges.forEach(challenge => {
+                        const challengeElement = document.createElement('div');
+                        challengeElement.className = 'bg-gray-700 p-3 rounded-lg mb-2 flex justify-between items-center';
+                        challengeElement.innerHTML = `
+                            <p class="truncate">Challenge from: ${challenge.challengerUserId}</p>
+                            <button class="join-challenge-btn btn-butter bg-gradient-to-r from-green-500 to-lime-600 text-white text-xs px-3 py-1 ml-2">Join</button>
+                        `;
+                        // TODO: Add event listener for join button
+                        challengesList.appendChild(challengeElement);
+                    });
+                }
+            };
+
+
+            // --- VIEW TOGGLING ---
+            const showView = (view) => {
+                packOpenerView.classList.add('hidden');
+                vaultView.classList.add('hidden');
+                battleView.classList.add('hidden');
+                lobbyView.classList.add('hidden');
+                if (view === 'packOpener') {
+                    packOpenerView.classList.remove('hidden');
+                } else if (view === 'vault') {
+                    vaultView.classList.remove('hidden');
+                    renderVault(playerVault);
+                } else if (view === 'battle') {
+                    battleView.classList.remove('hidden');
+                } else if (view === 'lobby') {
+                    lobbyView.classList.remove('hidden');
+                }
+            };
+
+            // --- PACK OPENING LOGIC ---
+            const generatePack = () => {
+                const pack = [];
+                for (let i = 0; i < cardsPerPack; i++) {
+                    const randomIndex = Math.floor(Math.random() * griftsCharacters.length);
+                    pack.push(griftsCharacters[randomIndex]);
+                }
+                return pack;
+            };
+
+            const renderCard = (card) => {
+                const rarityColorClass = rarityColors[card.rarity] || 'bg-gray-400';
+                const rarityNeonClass = rarityNeonClasses[card.rarity] || 'rarity-common';
+                const cardElement = document.createElement('div');
+                cardElement.className = `card bg-card-bg rounded-xl shadow-md border-2 border-transparent ${rarityNeonClass}`;
+                cardElement.innerHTML = `
+                    <div class="card-image-plush rounded-t-xl overflow-hidden">
+                        <img src="${card.image}" alt="${card.name}" class="w-full h-auto">
+                    </div>
+                    <div class="p-2 text-center">
+                        <h3 class="text-sm font-bold">${card.name}</h3>
+                        <div class="w-full h-1 rounded-full ${rarityColorClass} my-1"></div>
+                    </div>
+                `;
+                return cardElement;
+            };
+
+            const startPackOpening = () => {
+                openPackBtn.style.display = 'none';
+                packElement.classList.remove('hidden');
+                packElement.classList.add('pack-glow');
+                cardRevealContainer.innerHTML = '';
+                currentPack = generatePack();
+
+                packElement.textContent = "Unsealing...";
+                setTimeout(() => {
+                    packElement.classList.remove('pack-glow');
+                    packElement.classList.add('hidden');
+                    packElement.innerHTML = `<h2 class="text-2xl font-bold">Rift Pack</h2>`;
+
+                    currentPack.forEach((card, index) => {
+                        const cardElement = renderCard(card);
+                        cardRevealContainer.appendChild(cardElement);
+
+                        setTimeout(() => {
+                            cardElement.classList.add('revealed');
+                            if (index === currentPack.length - 1) {
+                                openPackBtn.textContent = 'Go to Vault';
+                                openPackBtn.style.display = 'block';
+                                openPackBtn.onclick = () => {
+                                    saveVaultToFirestore(currentPack);
+                                    showView('vault');
+                                    openPackBtn.onclick = startPackOpening;
+                                };
+                            }
+                        }, 500 + (index * 700));
+                    });
+                }, 1000);
+            };
+
+            // --- VAULT LOGIC ---
+            const renderVault = (cards) => {
+                vaultCardContainer.innerHTML = '';
+                if (cards.length === 0) {
+                    emptyVaultMessage.classList.remove('hidden');
+                    vaultCardContainer.appendChild(emptyVaultMessage);
+                } else {
+                    emptyVaultMessage.classList.add('hidden');
+                    cards.forEach((card, index) => {
+                        const rarityColorClass = rarityColors[card.rarity] || 'bg-gray-400';
+                        const rarityNeonClass = rarityNeonClasses[card.rarity] || 'rarity-common';
+                        const cardElement = `
+                            <div class="vault-card bg-card-bg rounded-xl shadow-md transition-all duration-300 transform hover:scale-105 hover:border-transparent ${rarityNeonClass}" data-card-index="${index}">
+                                <div class="card-image-plush rounded-t-xl overflow-hidden">
+                                    <img src="${card.image}" alt="${card.name}" class="w-full h-auto">
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold mb-1">${card.name}</h3>
+                                    <p class="text-xs font-semibold text-text-gray uppercase">${card.faction}</p>
+                                    <div class="w-full h-2 rounded-full ${rarityColorClass} my-2"></div>
+                                    <p class="text-sm font-medium text-text-gray">Rarity: ${card.rarity}</p>
+                                    <p class="text-sm font-medium text-text-gray">Health: ${card.health}</p>
+                                    <p class="text-sm font-medium text-text-gray">Attack: ${card.attack}</p>
+                                </div>
+                            </div>
+                        `;
+                        vaultCardContainer.innerHTML += cardElement;
+                    });
+                }
+            };
+
+            const filterVault = (filter) => {
+                if (!isAuthReady) return;
+                const vaultCards = playerVault;
+                if (filter === 'all') {
+                    renderVault(vaultCards);
+                } else {
+                    const filteredCards = vaultCards.filter(card => card.faction === filter);
+                    renderVault(filteredCards);
+                }
+            };
+
+            // --- BATTLE LOGIC (Placeholder for now) ---
+            const startBattle = (playerGrift) => {
+                showView('battle');
+                logMessage("Battle mode is disabled. Please use the Multiplayer Lobby to create or join a challenge!");
+            };
+
+            const logMessage = (message) => {
+                const p = document.createElement('p');
+                p.textContent = message;
+                battleLog.appendChild(p);
+                battleLog.scrollTop = battleLog.scrollHeight;
+            };
+
+            // --- EVENT LISTENERS AND INITIAL STATE ---
+            openPackBtn.addEventListener('click', startPackOpening);
+            goToPackBtn.addEventListener('click', () => showView('packOpener'));
+            multiplayerBtn.addEventListener('click', () => showView('lobby'));
+            clearVaultBtn.addEventListener('click', clearVault);
+            backToVaultBtn.addEventListener('click', () => showView('vault'));
+            backToVaultFromLobbyBtn.addEventListener('click', () => showView('vault'));
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    filterVault(event.target.dataset.filter);
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    event.target.classList.add('active');
+                });
+            });
+
+            // The initial view is now the pack opener
+            showView('packOpener');
+        };
+
+        // Start the app initialization process when the document is ready
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
+

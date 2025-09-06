@@ -1,1 +1,128 @@
-body { font-family: sans-serif; }
+/* Importing fonts for a clean, futuristic look */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+:root {
+    --bg-color: #0a0a0a;
+    --card-bg: #111111;
+    --text-light: #e0e0e0;
+    --text-gray: #7d7d7d;
+    --accent: #ff00aa;
+    --neon-purple: #9b59b6;
+    --neon-blue: #3498db;
+    --neon-green: #2ecc71;
+    --neon-yellow: #f1c40f;
+    --border-color: #222;
+}
+
+body {
+    font-family: 'Fredoka', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 0, 170, 0.1) 0%, rgba(10, 10, 10, 0.5) 70%);
+    z-index: -1;
+}
+
+h1, h2, h3 {
+    font-family: 'Permanent Marker', cursive;
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+}
+
+.glow-border {
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(255, 0, 170, 0.5);
+    transition: all 0.3s ease-in-out;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    min-height: 250px;
+    margin-top: 2rem;
+}
+
+.card {
+    width: 150px;
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    position: relative;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+}
+
+.card.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.pack-glow {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px var(--accent), 0 0 30px rgba(255, 0, 170, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 25px var(--accent), 0 0 50px rgba(255, 0, 170, 0.8);
+    }
+}
+
+/* "Butter" button styling */
+.btn-butter {
+    font-weight: 600;
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    transform: translateY(0);
+}
+
+.btn-butter:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.card-image-plush {
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Rarity glow colors */
+.rarity-common { box-shadow: 0 0 8px var(--neon-blue); }
+.rarity-uncommon { box-shadow: 0 0 8px var(--neon-green); }
+.rarity-rare { box-shadow: 0 0 8px var(--neon-purple); }
+.rarity-legendary { box-shadow: 0 0 8px var(--neon-yellow); }
+
+.filter-btn:not(.active) {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+.filter-btn.active {
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+}

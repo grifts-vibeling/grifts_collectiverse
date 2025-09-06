@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grifts Lore</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a polished look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container bg-slate-800 p-8 rounded-lg shadow-xl border border-slate-700">
+    <div class="flex flex-col items-center space-y-6">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-indigo-400">The Lore of Grifts</h1>
+
+        <!-- The button to trigger the lore display -->
+        <button id="readLoreBtn"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-800">
+            Read the Lore
+        </button>
+
+        <!-- The box that will display the lore -->
+        <div id="loreBox"
+             class="w-full bg-slate-900 p-6 rounded-lg border border-slate-700 mt-6 min-h-[200px] flex items-center justify-center text-center text-gray-400 text-sm italic">
+            Click the button above to begin your journey...
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // The lore content, simulating a fetch from a separate file
+        const griftsLore = `
+            🌌 The Lore of the Collectiverse
+
+            Long ago, the Collectiverse was a boundless realm of creativity and chaos — a place where stories, creatures, and artifacts were born from imagination itself. This living energy was called The Flux, a cosmic force that constantly spun out new worlds, beings, and objects.
+
+            But the Flux is unstable. Left unchecked, its creations fragment and vanish. To preserve its wonders, the Archivists of Grift appeared — mysterious keepers who began sealing characters, items, and relics inside Grift Packs. These packs act as dimensional vaults, allowing mortals (players) to unlock and wield fragments of the Collectiverse.
+
+
+            ---
+
+            🔑 Key Lore Anchors
+
+            1. Grifts
+
+            Small rifts in reality where Flux energy leaks.
+
+            Each Grift spawns unique characters, items, or anomalies.
+
+            Opening a Mystery Pack is like cracking open a Grift.
+
+
+
+            2. The Archivists
+
+            Mysterious figures who safeguard the Collectiverse.
+
+            They designed the pack system to distribute Flux creations fairly.
+
+            Their motives? Unclear — some say they pit mortals against each other to stabilize the Flux.
+        `;
+
+        const readLoreBtn = document.getElementById('readLoreBtn');
+        const loreBox = document.getElementById('loreBox');
+
+        readLoreBtn.addEventListener('click', () => {
+            // Show a loading message and disable the button
+            loreBox.textContent = 'Loading lore...';
+            readLoreBtn.disabled = true;
+
+            // Simulate a network delay
+            setTimeout(() => {
+                // The bug was likely in a line of code similar to this commented-out example:
+                // const badRegex = new RegExp('/^---$/m'); // This is incorrect! The slashes are not part of the regex string.
+                // loreBox.textContent = griftsLore.replace(badRegex, '***'); // This would throw the error.
+
+                // The correct way is to create the RegExp object using a string and the flags as a second argument,
+                // or to use a regex literal. We'll use the constructor here.
+                const goodRegex = new RegExp('^\\s*---$', 'gm');
+
+                // Now, safely replace the markdown horizontal rules with asterisks
+                const cleanLore = griftsLore.replace(goodRegex, '\n\n***\n\n');
+
+                loreBox.innerHTML = `
+                    <div class="text-left text-base sm:text-lg">
+                        <p class="mb-4">${cleanLore}</p>
+                    </div>
+                `;
+
+                readLoreBtn.disabled = false;
+            }, 1000); // 1-second delay
+        });
+    });
+</script>
+
+</body>
+</html>
+
